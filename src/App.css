@@ -1,42 +1,89 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+  color: gold;
+}
+
+.banner-background {
+  background-image: url('../public/banner.jpg');
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bannerContent {
+  display: flex;
+  /* flex-direction: column; */
+  padding-top: 80px;
+  justify-content: space-around;
+}
+
+.tagline {
+  display: flex;
+  height: 40%;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.carousel {
+  height: 50%;
+  display: flex;
+  align-items: center;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.carousel-container {
+  height: 50%;
+  display: flex;
+  align-items: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.carousel-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  color: white;
 }
 
-.card {
-  padding: 2em;
+.carousel-item img {
+  height: 60px;
+  margin-bottom: 10px;
 }
 
-.read-the-docs {
-  color: #888;
+.carousel-item span {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.carousel-item .profit {
+  color: rgb(14, 203, 129);
+  font-weight: 500;
+}
+
+.carousel-item .loss {
+  color: red;
+  font-weight: 500;
+}
+
+.coin-row {
+  background-color: #16171a;
+  cursor: pointer;
+}
+
+.coin-row:hover {
+  background-color: #131111;
 }
