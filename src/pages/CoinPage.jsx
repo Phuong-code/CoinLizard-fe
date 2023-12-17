@@ -6,12 +6,10 @@ import { useParams } from 'react-router-dom';
 import CoinInfo from '../components/CoinInfo';
 import { SingleCoin } from '../services/coinPageService';
 import { numberWithCommas } from '../components/CoinsTable';
-import { CryptoState } from '../components/CryptoContent';
 
 const CoinPage = () => {
   const { coinId } = useParams();
   const [coin, setCoin] = useState();
-  const { currency, symbol } = CryptoState();
 
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(coinId));
@@ -48,7 +46,7 @@ const CoinPage = () => {
                 fontFamily: 'Montserrat',
               }}
             >
-              {symbol} {numberWithCommas(coin?.currentPrice.toFixed(2))}
+              {'$'} {numberWithCommas(coin?.currentPrice.toFixed(2))}
             </Typography>
           </span>
           <span style={{ display: 'flex' }}>
@@ -62,7 +60,7 @@ const CoinPage = () => {
                 fontFamily: 'Montserrat',
               }}
             >
-              {symbol} {numberWithCommas(coin?.marketCap.toString().slice(0, -6))}M
+              {'$'} {numberWithCommas(coin?.marketCap.toString().slice(0, -6))}M
             </Typography>
           </span>
         </div>

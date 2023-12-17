@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import coinsTableService from '../services/coinsTableService';
-import { CryptoState } from './CryptoContent';
 
 export function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -27,7 +26,6 @@ export default function CoinsTable() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  const { currency, symbol } = CryptoState();
   const navigate = useNavigate();
 
   const darkTheme = createTheme({
@@ -55,7 +53,7 @@ export default function CoinsTable() {
   useEffect(() => {
     fetchCoins();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currency]);
+  }, []);
 
   const handleSearch = () => {
     return coins.filter(
@@ -149,7 +147,7 @@ export default function CoinsTable() {
                         </div>
                       </TableCell>
                       <TableCell align="right" style={{ fontSize: numberFontSize }}>
-                        {symbol} {numberWithCommas(row.currentPrice.toFixed(2))}
+                        {'$'} {numberWithCommas(row.currentPrice.toFixed(2))}
                       </TableCell>
                       <TableCell
                         align="right"
@@ -185,10 +183,10 @@ export default function CoinsTable() {
                         {row.priceChangePercentage30d.toFixed(2)}%
                       </TableCell>
                       <TableCell align="right" style={{ fontSize: numberFontSize }}>
-                        {symbol} {numberWithCommas(row.volumn24h.toString().slice(0, -6))}M
+                        {'$'} {numberWithCommas(row.volumn24h.toString().slice(0, -6))}M
                       </TableCell>
                       <TableCell align="right" style={{ fontSize: numberFontSize }}>
-                        {symbol} {numberWithCommas(row.marketCap.toString().slice(0, -6))}M
+                        {'$'} {numberWithCommas(row.marketCap.toString().slice(0, -6))}M
                       </TableCell>
                     </TableRow>
                   );
