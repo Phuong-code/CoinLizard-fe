@@ -3,7 +3,6 @@ import {
   Container,
   createTheme,
   TableCell,
-  LinearProgress,
   ThemeProvider,
   Typography,
   TextField,
@@ -13,7 +12,9 @@ import {
   TableContainer,
   Table,
   Paper,
+  LinearProgress,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import coinsTableService from '../services/coinsTableService';
 import { CryptoState } from './CryptoContent';
 
@@ -23,10 +24,11 @@ export function numberWithCommas(x) {
 
 export default function CoinsTable() {
   const [coins, setCoins] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   const { currency, symbol } = CryptoState();
+  const navigate = useNavigate();
 
   const darkTheme = createTheme({
     palette: {
@@ -81,21 +83,27 @@ export default function CoinsTable() {
             <Table aria-label="simple table">
               <TableHead style={{ backgroundColor: '#EEBC1D' }}>
                 <TableRow>
-                  {['Coin', 'Price', '24h Change', '7d Change', '24h Volumn', 'Market Cap'].map(
-                    (head) => (
-                      <TableCell
-                        style={{
-                          color: 'black',
-                          fontWeight: '700',
-                          fontFamily: 'Montserrat',
-                        }}
-                        key={head}
-                        align={head === 'Coin' ? 'center' : 'right'}
-                      >
-                        {head}
-                      </TableCell>
-                    ),
-                  )}
+                  {[
+                    'Coin',
+                    'Price',
+                    '24h Change',
+                    '7d Change',
+                    '30d Change',
+                    '24h Volumn',
+                    'Market Cap',
+                  ].map((head) => (
+                    <TableCell
+                      style={{
+                        color: 'black',
+                        fontWeight: '700',
+                        fontFamily: 'Montserrat',
+                      }}
+                      key={head}
+                      align={head === 'Coin' ? 'center' : 'right'}
+                    >
+                      {head}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
 
@@ -103,10 +111,14 @@ export default function CoinsTable() {
                 {handleSearch().map((row) => {
                   const profit24h = row.priceChangePercentage24h > 0;
                   const profit7d = row.priceChangePercentage7d > 0;
+                  const profit30d = row.priceChangePercentage30d > 0;
                   const numberFontSize = '18px';
+                  const numberFontWeight = '500';
+                  const positiveColor = 'rgb(14, 203, 129)';
+                  const negativeColor = 'red';
                   return (
                     <TableRow
-                      onClick={() => history.push(`/coins/${row.id}`)}
+                      onClick={() => navigate(`/coin/${row.id}`)}
                       className="coin-row"
                       key={row.name}
                     >
@@ -142,8 +154,8 @@ export default function CoinsTable() {
                       <TableCell
                         align="right"
                         style={{
-                          color: row.priceChangePercentage24h > 0 ? 'rgb(14, 203, 129)' : 'red',
-                          fontWeight: 500,
+                          color: profit24h ? positiveColor : negativeColor,
+                          fontWeight: numberFontWeight,
                           fontSize: numberFontSize,
                         }}
                       >
@@ -153,13 +165,24 @@ export default function CoinsTable() {
                       <TableCell
                         align="right"
                         style={{
-                          color: row.priceChangePercentage7d > 0 ? 'rgb(14, 203, 129)' : 'red',
-                          fontWeight: 500,
+                          color: profit7d ? positiveColor : negativeColor,
+                          fontWeight: numberFontWeight,
                           fontSize: numberFontSize,
                         }}
                       >
                         {profit7d && '+'}
                         {row.priceChangePercentage7d.toFixed(2)}%
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        style={{
+                          color: profit30d ? positiveColor : negativeColor,
+                          fontWeight: numberFontWeight,
+                          fontSize: numberFontSize,
+                        }}
+                      >
+                        {profit30d && '+'}
+                        {row.priceChangePercentage30d.toFixed(2)}%
                       </TableCell>
                       <TableCell align="right" style={{ fontSize: numberFontSize }}>
                         {symbol} {numberWithCommas(row.volumn24h.toString().slice(0, -6))}M

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PRICE_DATA_ENDPOINT = '/api/price-data';
+const PRICE_DATA_ENDPOINT = '/api/crypto';
 
 const coinsTableService = {
   getAllCoinsDetails: async () => {

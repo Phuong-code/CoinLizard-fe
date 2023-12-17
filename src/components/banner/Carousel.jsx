@@ -24,7 +24,6 @@ const Carousel = () => {
     }
 
     // If data is not cached or expired, make the API call
-
     coinsTableService
       .getAllCoinsDetails()
       .then((data) => {
