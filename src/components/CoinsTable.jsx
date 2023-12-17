@@ -15,15 +15,15 @@ import {
   LinearProgress,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import coinsTableService from '../services/coinsTableService';
+import homePageService from '../services/homePageService';
+import { numberWithCommas } from '../utils/numberWithCommas';
 
-export function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
+const CACHE_KEY = 'CoinsCache';
+const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time in milliseconds (15 mins)
 
 export default function CoinsTable() {
   const [coins, setCoins] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
 
   const navigate = useNavigate();
@@ -39,15 +39,35 @@ export default function CoinsTable() {
 
   const fetchCoins = async () => {
     setLoading(true);
-    coinsTableService
+    // Check if the data is available in the cache
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    if (cachedData) {
+      const { data, timestamp } = JSON.parse(cachedData);
+
+      // Check if the cached data is not expired
+      if (Date.now() - timestamp < CACHE_EXPIRATION_TIME) {
+        setCoins(data);
+        setLoading(false);
+        return;
+      }
+    }
+
+    // If data is not cached or expired, make the API call
+    homePageService
       .getAllCoinsDetails()
       .then((data) => {
+        // Cache the fetched data along with a timestamp
+        const cacheData = {
+          data,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
         setCoins(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching all coins details:', error);
       });
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -69,7 +89,7 @@ export default function CoinsTable() {
           Cryptocurrency Prices by Market Cap
         </Typography>
         <TextField
-          label="Search For a Crypto Currency.."
+          label="Search For a Crypto Currency..."
           variant="outlined"
           style={{ marginBottom: 20, width: '100%' }}
           onChange={(e) => setSearch(e.target.value)}

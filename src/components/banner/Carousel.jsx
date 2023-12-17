@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import { Box } from '@mui/material';
 import 'react-alice-carousel/lib/alice-carousel.css';
-import coinsTableService from '../../services/bannerService';
+import homePageService from '../../services/homePageService';
 
-const CACHE_KEY = 'trendingCoinsCache';
+const CACHE_KEY = 'CoinsCache';
 const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time in milliseconds (15 mins)
 
 const Carousel = () => {
-  const [trending, setTrending] = useState([]);
+  const [coins, setCoins] = useState([]);
 
-  const fetchTrendingCoins = async () => {
+  const fetchCoins = async () => {
     // Check if the data is available in the cache
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
@@ -18,13 +18,13 @@ const Carousel = () => {
 
       // Check if the cached data is not expired
       if (Date.now() - timestamp < CACHE_EXPIRATION_TIME) {
-        setTrending(data);
+        setCoins(data);
         return;
       }
     }
 
     // If data is not cached or expired, make the API call
-    coinsTableService
+    homePageService
       .getAllCoinsDetails()
       .then((data) => {
         // Cache the fetched data along with a timestamp
@@ -33,7 +33,7 @@ const Carousel = () => {
           timestamp: Date.now(),
         };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-        setTrending(data);
+        setCoins(data);
       })
       .catch((error) => {
         console.error('Error fetching all coins details:', error);
@@ -41,10 +41,10 @@ const Carousel = () => {
   };
 
   useEffect(() => {
-    fetchTrendingCoins();
+    fetchCoins();
   }, []);
 
-  const items = trending.map((coin) => {
+  const items = coins.map((coin) => {
     const profit = coin?.priceChangePercentage24h >= 0;
 
     return (

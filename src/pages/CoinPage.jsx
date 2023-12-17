@@ -1,26 +1,26 @@
 import { LinearProgress, Typography } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-// import ReactHtmlParser from 'react-html-parser';
-import CoinInfo from '../components/CoinInfo';
-import { SingleCoin } from '../services/coinPageService';
-import { numberWithCommas } from '../components/CoinsTable';
+import PriceChart from '../components/PriceChart';
+import coinPageService from '../services/coinPageService';
+import { numberWithCommas } from '../utils/numberWithCommas';
 
 const CoinPage = () => {
   const { coinId } = useParams();
   const [coin, setCoin] = useState();
 
-  const fetchCoin = async () => {
-    const { data } = await axios.get(SingleCoin(coinId));
-    console.log(data);
-    setCoin(data);
+  const fetchCoin = async (coinId) => {
+    try {
+      const data = await coinPageService.getSingleCoin(coinId);
+      setCoin(data);
+    } catch (error) {
+      console.error('Error fetching details for coin:', error);
+    }
   };
 
   useEffect(() => {
-    fetchCoin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    fetchCoin(coinId);
+  }, [coinId]);
 
   if (!coin) return <LinearProgress style={{ backgroundColor: 'gold' }} />;
 
@@ -31,9 +31,6 @@ const CoinPage = () => {
         <Typography variant="h3" className="coinPage-heading">
           {coin?.name}
         </Typography>
-        {/* <Typography variant="subtitle1" className="coinPage-description">
-          {ReactHtmlParser(coin?.description.en.split('. ')[0])}.
-        </Typography> */}
         <div className="coinPage-marketData">
           <span style={{ display: 'flex' }}>
             <Typography variant="h5" className="coinPage-heading">
@@ -65,7 +62,7 @@ const CoinPage = () => {
           </span>
         </div>
       </div>
-      <CoinInfo coin={coin} />
+      <PriceChart coin={coin} />
     </div>
   );
 };

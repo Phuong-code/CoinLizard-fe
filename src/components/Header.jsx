@@ -26,7 +26,6 @@ function Header() {
               onClick={GoToHomePage}
               variant="h6"
               sx={{
-                flex: 1,
                 color: 'gold',
                 fontFamily: 'Montserrat',
                 fontWeight: 'bold',

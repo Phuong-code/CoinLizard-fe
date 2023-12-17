@@ -1,30 +1,38 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { HistoricalChart } from '../services/coinPageService';
+import PropTypes from 'prop-types';
+import coinPageService from '../services/coinPageService';
 import { Line } from 'react-chartjs-2';
 import { CircularProgress, createTheme, ThemeProvider } from '@mui/material';
 import SelectButton from './SelectButton';
-import { chartDays } from '../services/data';
+import { chartDays } from '../utils/chartDays';
 // eslint-disable-next-line no-unused-vars
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 
-// eslint-disable-next-line react/prop-types
-const CoinInfo = ({ coin }) => {
+const PriceChart = ({ coin }) => {
   const [historicData, setHistoricData] = useState();
   const [days, setDays] = useState(7);
   const [flag, setflag] = useState(false);
 
-  const fetchHistoricData = async () => {
-    // eslint-disable-next-line react/prop-types
-    const { data } = await axios.get(HistoricalChart(coin.id, days));
-    setflag(true);
-    setHistoricData(data.prices);
+  PriceChart.propTypes = {
+    coin: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  };
+
+  const fetchHistoricData = async (id, days) => {
+    try {
+      const data = await coinPageService.getHistoricalChart(id, days);
+      setflag(true);
+      setHistoricData(data.prices);
+    } catch (error) {
+      console.error('Error fetching historical Data for coin:', error);
+    }
   };
 
   useEffect(() => {
-    fetchHistoricData();
-  }, [coin, days]); // Include all dependencies
+    fetchHistoricData(coin.id, days);
+  }, [coin.id, days]);
 
   const darkTheme = createTheme({
     palette: {
@@ -85,6 +93,11 @@ const CoinInfo = ({ coin }) => {
                     beginAtZero: false,
                   },
                 },
+                plugins: {
+                  legend: {
+                    align: 'end',
+                  },
+                },
               }}
             />
             <div className="chartDaysContainer">
@@ -108,4 +121,4 @@ const CoinInfo = ({ coin }) => {
   );
 };
 
-export default CoinInfo;
+export default PriceChart;
