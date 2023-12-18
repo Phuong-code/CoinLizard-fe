@@ -14,7 +14,7 @@ function Banner() {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      // Clean up the event listener-a
+      // Clean up the event listener
       window.removeEventListener('resize', handleResize);
     };
   }, []);
