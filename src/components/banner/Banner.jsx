@@ -7,17 +7,17 @@ function Banner() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    // Add a resize event listener to update windowWidth
+    // handleResize function updates the windowWidth state based on the current window size
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
     window.addEventListener('resize', handleResize);
-
     return () => {
-      // Clean up the event listener
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Select appropriate typography variants based on window width for responsive typography
   const variantTitle = windowWidth < 800 ? 'h4' : 'h3';
   const variantSubTitle = windowWidth < 800 ? 'subtitle2' : 'subtitle1';
 
@@ -50,6 +50,7 @@ function Banner() {
             Get all the Info regarding your favorite Crypto Currency
           </Typography>
         </div>
+        {/* Carousel component to display a carousel of crypto coins */}
         <Carousel />
       </Container>
     </div>

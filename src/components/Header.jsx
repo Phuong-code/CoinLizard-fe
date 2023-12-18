@@ -3,6 +3,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
+
+  // Creating a dark theme using MUI's createTheme
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -11,8 +14,8 @@ function Header() {
       mode: 'dark',
     },
   });
-  const navigate = useNavigate();
 
+  // Function to navigate to the home page when the title is clicked
   const GoToHomePage = () => {
     navigate('/');
   };

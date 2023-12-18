@@ -18,16 +18,16 @@ import { useNavigate } from 'react-router-dom';
 import homePageService from '../services/homePageService';
 import { numberWithCommas } from '../utils/numberWithCommas';
 
-const CACHE_KEY = 'CoinsCache';
-const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time in milliseconds (15 mins)
+const CACHE_KEY = 'CoinsCache'; // Key for storing cache in local storage
+const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time (15 mins)
 
 export default function CoinsTable() {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-
   const navigate = useNavigate();
 
+  // Theme customization for Material UI components
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -37,6 +37,7 @@ export default function CoinsTable() {
     },
   });
 
+  // Function to fetch coin data from the API or local cache
   const fetchCoins = async () => {
     setLoading(true);
     // Check if the data is available in the cache
@@ -72,9 +73,9 @@ export default function CoinsTable() {
 
   useEffect(() => {
     fetchCoins();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Function to handle search filtering
   const handleSearch = () => {
     return coins.filter(
       (coin) =>
@@ -127,6 +128,7 @@ export default function CoinsTable() {
 
               <TableBody>
                 {handleSearch().map((row) => {
+                  // Determining the color based on profit or loss
                   const profit24h = row.priceChangePercentage24h > 0;
                   const profit7d = row.priceChangePercentage7d > 0;
                   const profit30d = row.priceChangePercentage30d > 0;
@@ -140,6 +142,7 @@ export default function CoinsTable() {
                       className="coin-row"
                       key={row.name}
                     >
+                      {/* Coin cell with image and name */}
                       <TableCell
                         component="th"
                         scope="row"

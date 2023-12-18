@@ -12,18 +12,18 @@ import 'chartjs-adapter-date-fns';
 const PriceChart = ({ coin }) => {
   const [historicData, setHistoricData] = useState();
   const [days, setDays] = useState(7);
-  const [flag, setflag] = useState(false);
 
+  // Define PropTypes for type checking
   PriceChart.propTypes = {
     coin: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
   };
 
+  // Function to fetch historical data
   const fetchHistoricData = async (id, days) => {
     try {
       const data = await coinPageService.getHistoricalChart(id, days);
-      setflag(true);
       setHistoricData(data.prices);
     } catch (error) {
       console.error('Error fetching historical Data for coin:', error);
@@ -34,6 +34,7 @@ const PriceChart = ({ coin }) => {
     fetchHistoricData(coin.id, days);
   }, [coin.id, days]);
 
+  // Theme customization for Material UI components
   const darkTheme = createTheme({
     palette: {
       primary: {
@@ -46,10 +47,12 @@ const PriceChart = ({ coin }) => {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className="coinInfoContainer">
-        {!historicData || flag === false ? (
+        {/* Display a loading indicator while data is being fetched */}
+        {!historicData ? (
           <CircularProgress style={{ color: 'gold' }} size={250} thickness={1} />
         ) : (
           <>
+            {/* Line chart to display historical price data */}
             <Line
               data={{
                 datasets: [
@@ -100,13 +103,13 @@ const PriceChart = ({ coin }) => {
                 },
               }}
             />
+            {/* Buttons to select the number of days for the chart */}
             <div className="chartDaysContainer">
               {chartDays.map((day) => (
                 <SelectButton
                   key={day.value}
                   onClick={() => {
                     setDays(day.value);
-                    setflag(false);
                   }}
                   selected={day.value === days}
                 >

@@ -3,6 +3,7 @@ import axios from 'axios';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const coinPageService = {
+  // Function to get details of a single coin
   getSingleCoin: async (id) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/api/crypto/coin/${id}`);
@@ -13,6 +14,7 @@ const coinPageService = {
     }
   },
 
+  // Function to get historical price data of a coin
   getHistoricalChart: async (id, days) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/api/price-data/${id}/days=${days}`);

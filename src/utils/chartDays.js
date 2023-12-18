@@ -1,3 +1,4 @@
+// chartDays array defines the time ranges for displaying chart data
 export const chartDays = [
   {
     label: '7 Days',

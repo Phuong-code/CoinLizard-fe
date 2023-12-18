@@ -6,9 +6,10 @@ import coinPageService from '../services/coinPageService';
 import { numberWithCommas } from '../utils/numberWithCommas';
 
 const CoinPage = () => {
-  const { coinId } = useParams();
+  const { coinId } = useParams(); // Retrieve coin ID from URL parameters
   const [coin, setCoin] = useState();
 
+  // Function to fetch details of the coin from the API
   const fetchCoin = async (coinId) => {
     try {
       const data = await coinPageService.getSingleCoin(coinId);
@@ -22,6 +23,7 @@ const CoinPage = () => {
     fetchCoin(coinId);
   }, [coinId]);
 
+  // Display a progress bar if the coin data is not yet loaded
   if (!coin) return <LinearProgress style={{ backgroundColor: 'gold' }} />;
 
   return (
@@ -62,6 +64,7 @@ const CoinPage = () => {
           </span>
         </div>
       </div>
+      {/* PriceChart component to display the price chart of the coin */}
       <PriceChart coin={coin} />
     </div>
   );

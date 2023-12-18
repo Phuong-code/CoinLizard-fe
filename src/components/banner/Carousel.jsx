@@ -4,12 +4,13 @@ import { Box } from '@mui/material';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import homePageService from '../../services/homePageService';
 
-const CACHE_KEY = 'CoinsCache';
-const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time in milliseconds (15 mins)
+const CACHE_KEY = 'CoinsCache'; // Key for storing cache in local storage
+const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time (15 mins)
 
 const Carousel = () => {
   const [coins, setCoins] = useState([]);
 
+  // Function to fetch coins data
   const fetchCoins = async () => {
     // Check if the data is available in the cache
     const cachedData = localStorage.getItem(CACHE_KEY);
@@ -45,7 +46,7 @@ const Carousel = () => {
   }, []);
 
   const items = coins.map((coin) => {
-    const profit = coin?.priceChangePercentage24h >= 0;
+    const profit = coin?.priceChangePercentage24h >= 0; // Determine if the coin price is in profit
 
     return (
       <Box key={coin.id} className="carousel-item">
@@ -64,19 +65,12 @@ const Carousel = () => {
     );
   });
 
+  // Responsive settings for the carousel
   const responsive = {
-    0: {
-      items: 2,
-    },
-    350: {
-      items: 3,
-    },
-    600: {
-      items: 4,
-    },
-    1000: {
-      items: 5,
-    },
+    0: { items: 2 },
+    350: { items: 3 },
+    600: { items: 4 },
+    1000: { items: 5 },
   };
 
   return (
