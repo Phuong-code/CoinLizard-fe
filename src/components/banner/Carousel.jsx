@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AliceCarousel from 'react-alice-carousel';
 import { Box } from '@mui/material';
 import 'react-alice-carousel/lib/alice-carousel.css';
@@ -9,6 +10,7 @@ const CACHE_EXPIRATION_TIME = 1 * 15 * 60 * 1000; // Cache expiration time (15 m
 
 const Carousel = () => {
   const [coins, setCoins] = useState([]);
+  const navigate = useNavigate();
 
   // Function to fetch coins data
   const fetchCoins = async () => {
@@ -49,7 +51,7 @@ const Carousel = () => {
     const profit = coin?.priceChangePercentage24h >= 0; // Determine if the coin price is in profit
 
     return (
-      <Box key={coin.id} className="carousel-item">
+      <Box key={coin.id} className="carousel-item" onClick={() => navigate(`/coin/${coin.id}`)}>
         <div>
           <img src={coin?.image} alt={coin.name} />
         </div>

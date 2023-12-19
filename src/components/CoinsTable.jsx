@@ -52,7 +52,6 @@ export default function CoinsTable() {
         return;
       }
     }
-
     // If data is not cached or expired, make the API call
     homePageService
       .getAllCoinsDetails()
